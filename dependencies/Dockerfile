@@ -72,6 +72,7 @@ RUN cd /usr/src && \
     -DBUILD_SHARED_LIBS=on \
     -DBUILD_TESTS=off \
     -DINTEGER_CLASS=flint \
+    -DLLVM_DIR=??? \
     -DWITH_BOOST=on \
     -DWITH_LLVM=on \
     -DWITH_MPC=on \
