@@ -40,6 +40,7 @@ RUN apt-get update && apt-get install -y software-properties-common \
 ENV LANGUAGE=en_US:en  
 ENV LC_ALL=en_US.UTF-8
 
+# clang-format
 RUN wget https://raw.githubusercontent.com/dealii/dealii/refs/heads/master/contrib/utilities/download_clang_format \
     && chmod +x download_clang_format \
     && ./download_clang_format \
@@ -65,7 +66,7 @@ RUN cd /usr/src && \
 # Symengine
 RUN cd /usr/src && \
     wget https://github.com/symengine/symengine/releases/download/v0.14.0/symengine-0.14.0.tar.gz && \
-    tar xvfz symengine-0.14.0.tar.gz && rm symengine-0.14.0.tar.gz &&\
+    tar xvfz symengine-0.14.0.tar.gz && rm symengine-0.14.0.tar.gz && \
     cd symengine-0.14.0 && mkdir build && cd build && \
     cmake \
     -DBUILD_BENCHMARKS=off \
@@ -76,6 +77,27 @@ RUN cd /usr/src && \
     -DWITH_MPC=on \
     -DWITH_MPFR=on \
     -DWITH_SYMENGINE_THREAD_SAFE=on \
+    -GNinja .. && \
+    ninja && ninja install && \
+    cd .. && rm -rf build
+
+# t8code
+RUN cd /usr/src && \
+    wget https://github.com/DLR-AMR/t8code/releases/download/v4.0.0/T8CODE-4.0.0-Source.tar.gz && \
+    tar xvfz T8CODE-4.0.0-Source.tar.gz && rm T8CODE-4.0.0-Source.tar.gz && \
+    cd T8CODE-4.0.0-Source && mkdir build && cd build && \
+    cmake \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DT8CODE_BUILD_AS_SHARED_LIBRARY=ON \
+    -DT8CODE_BUILD_BENCHMARKS=OFF \
+    -DT8CODE_BUILD_TESTS=OFF \
+    -DT8CODE_BUILD_TUTORIALS=OFF \
+    -DT8CODE_BUILD_EXAMPLES=OFF \
+    -DT8CODE_ENABLE_MPI=ON \
+    -DT8CODE_ENABLE_VTK=OFF \
+    -DT8CODE_ENABLE_OCC=OFF \
+    -DT8CODE_USE_SYSTEM_SC=ON \
+    -DT8CODE_USE_SYSTEM_P4EST=ON \
     -GNinja .. && \
     ninja && ninja install && \
     cd .. && rm -rf build
