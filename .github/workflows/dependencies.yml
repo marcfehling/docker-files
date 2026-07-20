@@ -31,10 +31,16 @@ jobs:
         system:
           - ubuntu_version: jammy
             dealii_version: 9.7.1-1~ubuntu22.04.1~ppa1
+            repository: ppa:ginggs/deal.ii-9.7.1-backports
             tag: jammy-v9.7.1
           - ubuntu_version: noble
             dealii_version: 9.7.1-1~ubuntu24.04.1~ppa1
+            repository: ppa:ginggs/deal.ii-9.7.1-backports
             tag: noble-v9.7.1
+          - ubuntu_version: resolute
+            dealii_version: 9.7.1-5
+            repository:
+            tag: resolute-v9.7.1
 
     steps:
       - name: Checkout code
@@ -58,8 +64,8 @@ jobs:
           cache-to: type=inline
           build-args: |
             IMG=${{ matrix.system.ubuntu_version }}
-            VERSION=${{ matrix.system.dealii_version}}
-            REPO=ppa:ginggs/deal.ii-9.7.1-backports
+            VERSION=${{ matrix.system.dealii_version }}
+            REPO=${{ matrix.system.repository }}
           platforms: ${{ matrix.arch.build }}
           push: ${{ github.event_name != 'pull_request' }}
           load: ${{ github.event_name == 'pull_request' }}
@@ -82,6 +88,7 @@ jobs:
         os:
           - jammy
           - noble
+          - resolute
         ver:
           - v9.7.1
 

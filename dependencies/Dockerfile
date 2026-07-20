@@ -8,10 +8,13 @@ ARG REPO=ppa:ginggs/deal.ii-9.7.1-backports
 USER root
 ENV DEBIAN_FRONTEND=noninteractive 
 
-RUN apt-get update && apt-get install -y software-properties-common \
-    && add-apt-repository $REPO \
-    && apt-get update && \
-    apt-get install -y \
+RUN apt-get update \
+    && if [ -n "$REPO" ]; then \
+      apt-get install -y software-properties-common \
+      && add-apt-repository $REPO \
+      && apt-get update; \
+    fi \
+    && apt-get install -y \
     git \
     libboost-dev \
     libboost-python-dev \
@@ -35,11 +38,7 @@ RUN apt-get update && apt-get install -y software-properties-common \
     wget \
     && apt-get remove -y libdeal.ii-dev=$VERSION libcgal-dev \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* \
-    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
-
-ENV LANGUAGE=en_US:en  
-ENV LC_ALL=en_US.UTF-8
+    && rm -rf /var/lib/apt/lists/*
 
 RUN wget https://raw.githubusercontent.com/dealii/dealii/refs/heads/master/contrib/utilities/download_clang_format \
     && chmod +x download_clang_format \
@@ -144,8 +143,10 @@ RUN cd /usr/src && \
     -DVTK_WRAP_PYTHON=OFF && \
     ninja install && cd ../ && rm -rf build
 
-RUN locale-gen en_US.UTF-8  
-ENV LANG=en_US.UTF-8  
+RUN locale-gen en_US.UTF-8
+ENV LANGUAGE=en_US:en
+ENV LC_ALL=en_US.UTF-8
+ENV LANG=en_US.UTF-8
 
 RUN ldconfig
 ENV PYTHONPATH="/usr/local/lib/python3.8/site-packages/"
