@@ -3,6 +3,9 @@ name: dependencies
 on:
   workflow_dispatch:
   pull_request:
+    paths:
+    - .github/workflows/dependencies.yml
+    - dependencies/**
 
 permissions:
   contents: read
