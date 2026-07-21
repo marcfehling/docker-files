@@ -36,8 +36,6 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Symengine
-RUN cat /usr/local/lib/cmake/symengine/SymEngineConfig.cmake
-
 RUN cd /usr/src && \
     wget https://github.com/symengine/symengine/releases/download/v0.14.0/symengine-0.14.0.tar.gz && \
     tar xvfz symengine-0.14.0.tar.gz && rm symengine-0.14.0.tar.gz &&\
