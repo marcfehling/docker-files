@@ -8,6 +8,33 @@ ARG REPO=ppa:ginggs/deal.ii-9.7.1-backports
 USER root
 ENV DEBIAN_FRONTEND=noninteractive 
 
+RUN apt-get update \
+    && apt-get install -y \
+    git \
+    libboost-dev \
+    libboost-python-dev \
+    libcgal-dev \
+    libdeal.ii-dev \
+    libflint-dev \
+    libgmp-dev \
+    libgtest-dev \
+    libmpc-dev \
+    libnetcdf-mpi-dev \
+    locales \
+    ninja-build \
+    numdiff \
+    python-is-python3 \
+    python3-dev \
+    python3-matplotlib \
+    python3-pybind11 \
+    python3-scipy\
+    ssh \
+    sudo \
+    wget \
+    && apt-get remove -y libdeal.ii-dev libcgal-dev \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
 # Symengine
 RUN cat /usr/local/lib/cmake/symengine/SymEngineConfig.cmake
 
