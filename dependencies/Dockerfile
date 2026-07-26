@@ -82,12 +82,15 @@ RUN cd /usr/src && \
 # Symengine
 # We need to patch the CMake version requirement to be able to call find_package(SymEngine)
 # with CMake >=4.0 as compatibility with CMake <3.5 has been removed.
-# This patch will no longer be necessary for Symengine >=0.15.0.
+# We also need to patch the inclusion of <ciso646> which has been replaced with <version>
+# in C++20.
+# Both patches will no longer be necessary for Symengine >=0.15.0.
 RUN cd /usr/src && \
     wget https://github.com/symengine/symengine/releases/download/v0.14.0/symengine-0.14.0.tar.gz && \
     tar xvfz symengine-0.14.0.tar.gz && rm symengine-0.14.0.tar.gz &&\
     cd symengine-0.14.0 && \
     sed -i -e "s/cmake_minimum_required(VERSION 2.8.12)/cmake_minimum_required(VERSION 3.13)/" cmake/SymEngineConfig.cmake.in && \
+    sed -i -e "s/#include <ciso646>/#if __cplusplus <= 201703L\n#include <ciso646>\n#else\n#include <version>\n#endif/" symengine/prime_sieve.cpp symengine/symengine_rcp.h && \
     mkdir build && cd build && \
     cmake \
     -DBUILD_BENCHMARKS=off \
