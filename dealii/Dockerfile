@@ -58,7 +58,7 @@ RUN if [ "$IMG" != "jammy" ]; then \
     -DDEAL_II_WITH_VTK=ON \
     -DDEAL_II_WITH_ZLIB=ON \
     .. && \
-    ninja -j $NJOBS test && \
+    OMPI_ALLOW_RUN_AS_ROOT=1 OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1 ninja -j $NJOBS test && \
     ninja -j $NJOBS install && \
     cd ../ && rm -rf .git build
 
