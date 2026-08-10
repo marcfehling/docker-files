@@ -12,6 +12,7 @@ on:
         type: choice
         options:
           - 'master'
+          - 'v9.8.0'
           - 'v9.7.1'
   pull_request:
     paths:
